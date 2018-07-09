@@ -1,0 +1,14 @@
+{
+  "name": "GuestExe",
+  "version": "0.0.0",
+  "description": "GuestExe",
+  "main": "server.js",
+  "author": {
+    "name": "Wilfried Woivre",
+    "email": "wilfried.woivre@gmail.com"
+  },
+  "dependencies": {
+    "express": "^4.1.2",
+    "feed-read": "0.0.1"
+  }
+}
