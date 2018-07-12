@@ -2,7 +2,7 @@
 
 ## Visual Studio Code
 
-Lien de téléchargment : [https://code.visualstudio.com/Download](https://code.visualstudio.com/Download)
+Lien de téléchargement : [https://code.visualstudio.com/Download](https://code.visualstudio.com/Download)
 
 ## Visual Studio Code Extensions : 
 * Service Fabric Reliable Services [https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-service-fabric-reliable-services](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-service-fabric-reliable-services)
