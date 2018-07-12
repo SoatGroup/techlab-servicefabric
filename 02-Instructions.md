@@ -81,8 +81,8 @@ Renseignez les paramètres suivants :
 * Name of your application : **Techlabs**
 * Name of the application service : **LegacyApp**
 * Source folder of guest binary artifacts : **LegacyApp**
-* Relative path to guest binary in source folder : **server/node.exe**
-* Parameters to use when calling guest binary : **app/server.js**
+* Relative path to guest binary in source folder : **server\node.exe**
+* Parameters to use when calling guest binary : **app\server.js**
 * Number of instances of guest binary: **-1**
 
 Le workspace Visual Studio Code ressemble maintenant à cela :
