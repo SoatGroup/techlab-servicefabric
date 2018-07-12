@@ -1,5 +1,7 @@
 # Instructions
 
+La liste des raccourcis VS Code est disponible pour : [https://code.visualstudio.com/shortcuts/keyboard-shortcuts-macos.pdf](MacOS) / [https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf](Windows)
+
 ## Récupérer la solution via Github
 
 Il est possible de download la solution depuis Github, ou de faire un git clone
