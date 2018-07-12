@@ -115,12 +115,6 @@ Dans le fichier **ServiceManifest.xml**, ajouter la variable d'environnement pou
     </Resources>
 ```
 
-### Compiler l'application 
-
-Utiliser la commande **Service Fabric: Build application** qui nous génère les fichiers **Cloud.json**, **install.ps1** et **uninstall.ps1**
-
-![](assets/04-servicefabric-afterbuild.png)
-
 ## Déployer l'application 
 
 ### Créer un party cluster
@@ -130,32 +124,46 @@ Comment créer un party cluster : [http://mfery.com/blog/start-service-fabric-wi
 Récapitulatif de la création : 
 
 * Se rendre sur l'url [https://try.servicefabric.azure.com/](https://try.servicefabric.azure.com/)
-* Créer un compte via Github (ou Facebook)
-* Créer un cluster **windows**
-* Récupérer et installer le PFX dans CurrentUser\My
-    * Le mot de passe se trouve dans le ReadMe
-* Récupérer le thumbprint via la MMC ou via Powershell
+* Créer un compte via Github (ou Facebook) et l'utiliser pour se connecter
+* Créer un cluster **Windows**
+* Télécharger le PFX
+* Installer le PFX via la commande Powershell dans le répertoire ou se trouve le PFX
 ```powershell
-$url = "win243b7e6lxip.westus.cloudapp.azure.com"
-$cert = Get-ChildItem -Path Cert:\CurrentUser\My | Where-Object {$_.Subject -eq "cn=$url"} 
+$cert = Import-PfxCertificate -FilePath .\party-cluster-XXXXXXX-client-cert.pfx -CertStoreLocation Cert:\CurrentUser\My -Password (ConvertTo-SecureString 1234567890 -AsPlainText -Force)
 $cert.Thumbprint | Clip
 ```
+Lorsque vous jouerez cette commande, le thumbprint sera ajouté au presse-papiers.
+Il vous sera nécessaire pour le déploiement et cela vous évitera de le chercher dans les détails des certificats.
 
-### Script de déploiement
+Si toutefois, vous n'aviez pas noté le thumbprint, vous pourrez toujours le récupérer via le Manager de Certificat (command certmgr).
 
-Créer un fichier **deploy.ps1**, et y ajouter le code suivant (en fonction de votre party cluster)
+### Compiler l'application 
 
-```powershell
-$url = "win243b7e6lxip.westus.cloudapp.azure.com"
-$cert = Get-ChildItem -Path Cert:\CurrentUser\My | Where-Object {$_.Subject -eq "cn=$url"} 
-Connect-ServiceFabricCluster -ConnectionEndpoint "$($url):19000" -KeepAliveIntervalInSec 10 -X509Credential -ServerCertThumbprint $cert.Thumbprint -FindType 'FindByThumbprint' -FindValue $cert.Thumbprint -StoreLocation 'CurrentUser' -StoreName 'My' -Verbose
+Utiliser la commande **Service Fabric: Build application** qui nous génère les fichiers **Cloud.json**, **install.ps1** et **uninstall.ps1**
 
+![](assets/04-servicefabric-afterbuild.png)
 
-$AppPath = ".\Techlabs\Techlabs"
-Copy-ServiceFabricApplicationPackage -ApplicationPackagePath $AppPath -ApplicationPackagePathInImageStore Techlabs -CompressPackage
-Register-ServiceFabricApplicationType Techlabs
-New-ServiceFabricApplication fabric:/Techlabs TechlabsType 1.0.0
+### Configuration de déploiement
+
+Le fichier Cloud.json contient la configuration de connexion à votre cluster.
+Il faut donc y modifier le certificat, le endpoint et le port (**19000**).
+```Js
+{
+    "ClusterConnectionParameters": {
+        "ConnectionIPOrURL": "win24397l57kh8.westus.cloudapp.azure.com",
+        "ConnectionPort": "19000",
+        "ClientKey": "",
+        "ClientCert": "",
+        "ServerCertThumbprint": "84ACA5A5EC27FB486BA950DEF5744D0042745502",
+        "ClientCertThumbprint": "84ACA5A5EC27FB486BA950DEF5744D0042745502"
+    }
+}
 ```
+
+### [BONUS] Script de déploiement
+
+Le fichier install.ps1 contient le script de déploiement.
+Si vous voulez améliorer le suivi et la rapidité de déploiement vous pouvez ajouter les paramêtres **-ShowProgress -CompressPackage** à la commande **Copy-ServiceFabricApplicationPackage**.
 
 ### Vérifier votre déploiement
 
